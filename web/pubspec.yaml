@@ -10,6 +10,7 @@ environment:
 dependencies:
   angular: ^4.0.0
   angular_components: ^0.8.0
+  meta: "^1.1.2"
   shuttlecock: "^0.4.1"
 
 dev_dependencies:
