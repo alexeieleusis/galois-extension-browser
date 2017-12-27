@@ -1,7 +1,6 @@
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:library/library.dart';
-import 'package:shuttlecock/shuttlecock.dart';
 
 @Component(
   selector: 'field-builder',
@@ -34,7 +33,7 @@ class FieldBuilder implements OnInit {
     RelativePosition.AdjacentBottomRight
   ];
 
-  List<GaloisExtensionElement> elements;
+  GaloisExtension extension;
 
   FieldBuilder() {
     degreeSelection.selectionChanges.listen((_) {
@@ -78,17 +77,7 @@ class FieldBuilder implements OnInit {
 
       definition =
           new GaloisExtensionDefinition(_generator, _characteristic, _degree);
-
-      // TODO: Turn this into a fold.
-      var thing = new IterableMonad.fromIterable(
-          new Iterable.generate(_characteristic, (i) => [i]));
-      for (var i = 2; i <= _degree; i++) {
-        thing = thing.flatMap((vector) => new IterableMonad.fromIterable(
-            new Iterable.generate(
-                _characteristic, (i) => vector.toList()..insertAll(0, [i]))));
-      }
-      elements =
-          thing.map((v) => new GaloisExtensionElement(definition, v)).toList();
+      extension = new GaloisExtension(definition);
     });
   }
 

@@ -26,16 +26,19 @@
     </material-dropdown-select>
 </div>
 <br>
+<div *ngIf="extension != null">
+    <div>Generator: {{extension.generator}}</div>
 
-<table *ngIf="definition != null">
-    <tr>
-        <th>*</th>
-        <th *ngFor="let element of elements; let i = index">{{element}}</th>
-    </tr>
-    <tr *ngFor="let first of elements; let i = index">
-        <td>{{first}}</td>
-        <td *ngFor="let second of elements; let j = index">
-            {{first * second}}
-        </td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <th>*</th>
+            <th *ngFor="let element of extension.elements; let i = index">{{element}}</th>
+        </tr>
+        <tr *ngFor="let first of extension.elements; let i = index">
+            <td>{{first}}</td>
+            <td *ngFor="let second of extension.elements; let j = index">
+                {{first * second}}
+            </td>
+        </tr>
+    </table>
+</div>

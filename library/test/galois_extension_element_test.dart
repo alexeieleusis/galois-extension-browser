@@ -1,4 +1,5 @@
-import 'package:library/src/galois_extension.dart';
+import 'package:library/src/galois_extension_definition.dart';
+import 'package:library/src/galois_extension_element.dart';
 import 'package:test/test.dart';
 
 void main() {
