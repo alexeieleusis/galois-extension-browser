@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:library/src/primes.dart';
 import 'package:meta/meta.dart';
 
@@ -109,4 +110,7 @@ class GaloisExtensionElement {
 
     return new GaloisExtensionElement(definition, newValues);
   }
+
+  @override
+  String toString() => values.toList().toString();
 }

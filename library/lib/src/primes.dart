@@ -7,7 +7,7 @@ IterableMonad<int> findConstantsForSeed(int power, int prime) =>
         .where((c) => isCyclicExtensionSeed(c, power, prime));
 
 IterableMonad<int> findDivisors(int n) => new IterableMonad.fromIterable(
-    new Iterable.generate(n - 3, (i) => i + 2).where((d) => n % d == 0));
+    new Iterable.generate(n - 1, (i) => i + 2).where((d) => n % d == 0));
 
 IterableMonad<int> findPrimesCongruentWithOne(int module, int count) {
   final collection = <int>[];

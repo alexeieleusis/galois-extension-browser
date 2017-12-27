@@ -24,7 +24,7 @@ void main() {
     });
 
     test('divisors', () {
-      expect(findDivisors(36), [2, 3, 4, 6, 9, 12, 18]);
+      expect(findDivisors(36), [2, 3, 4, 6, 9, 12, 18, 36]);
     });
 
     test('divisors', () {
