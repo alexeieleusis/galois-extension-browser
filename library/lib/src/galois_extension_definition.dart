@@ -52,9 +52,6 @@ class GaloisExtensionDefinition {
             (acc, _) => acc.flatMap((vector) => new IterableMonad.fromIterable(
                 new Iterable.generate(characteristic,
                     (i) => vector.toList()..insertAll(0, [i])))))
-        .map((v) {
-      print(v);
-      return new GaloisExtensionElement(this, v);
-    });
+        .map((v) => new GaloisExtensionElement(this, v));
   }
 }

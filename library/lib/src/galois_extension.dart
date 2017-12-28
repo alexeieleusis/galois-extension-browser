@@ -4,22 +4,32 @@ import 'package:shuttlecock/shuttlecock.dart';
 
 class GaloisExtension {
   final GaloisExtensionDefinition definition;
-  final IterableMonad<GaloisExtensionElement> elements;
+  IterableMonad<GaloisExtensionElement> _elements;
   GaloisExtensionElement _generator;
   GaloisExtensionElement _one;
 
-  GaloisExtension(this.definition) : elements = definition.generateElements();
+  GaloisExtension(this.definition);
 
-  GaloisExtensionElement get generator =>
-      _generator ??= elements.skip(1).firstWhere((e) {
-        var power = 1;
-        var acc = e;
-        while (acc != one) {
-          acc = acc * e;
-          power++;
-        }
-        return power == elements.length - 1;
-      });
+  IterableMonad<GaloisExtensionElement> get elements =>
+      _elements ??= definition.generateElements();
+
+  GaloisExtensionElement get generator {
+    final discarded = new Set<GaloisExtensionElement>();
+    return _generator ??= elements.skip(1).firstWhere((e) {
+      if (discarded.contains(e)) {
+        return false;
+      }
+
+      var power = 1;
+      var acc = e;
+      while (acc != one) {
+        discarded.add(acc);
+        acc = acc * e;
+        power++;
+      }
+      return power == elements.length - 1;
+    });
+  }
 
   GaloisExtensionElement get one => _one ??= elements.skip(1).first;
 }
