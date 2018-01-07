@@ -31,5 +31,7 @@ class GaloisExtension {
     });
   }
 
-  GaloisExtensionElement get one => _one ??= elements.skip(1).first;
+  GaloisExtensionElement get one => _one ??= new GaloisExtensionElement(
+      definition,
+      new Iterable.generate(definition.degree, (i) => i == 0 ? 1 : 0));
 }
