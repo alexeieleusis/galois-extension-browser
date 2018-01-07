@@ -25,5 +25,23 @@ void main() {
 
       expect(sum.scalars.toList(), [one, one + one, one]);
     });
+
+    test('one', () {
+      final scalarOne = new PrimeFiniteFieldScalar(1, 3);
+
+      final one = new Polynomial([scalarOne]);
+
+      expect(one, one.one);
+      expect(one.isOne, true);
+    });
+
+    test('one', () {
+      final scalarZero = new PrimeFiniteFieldScalar(0, 3);
+
+      final zero = new Polynomial([scalarZero]);
+
+      expect(zero, zero.zero);
+      expect(zero.isZero, true);
+    });
   });
 }

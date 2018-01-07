@@ -2,24 +2,12 @@ import 'package:library/library.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class FieldScalar<T extends FieldScalar<T>> {
-  /// Do not use, temporarily here while a better design to get it emerges.
-  bool get isOne;
-
-  /// Do not use, temporarily here while a better design to get it emerges.
-  bool get isZero;
-
-  /// Do not use, temporarily here while a better design to get it emerges.
-  T get one;
-
-  /// Do not use, temporarily here while a better design to get it emerges.
-  T get zero;
-
-  T operator *(T other);
-
-  T operator +(T other);
+abstract class FieldScalar<T extends FieldScalar<T>>
+    extends RingWithOneScalar<T> {
+  T get inverse;
 }
 
+@immutable
 abstract class FiniteFieldScalar<T extends FiniteFieldScalar<T>>
     extends FieldScalar<T> {
   final int characteristic;
@@ -32,6 +20,7 @@ abstract class FiniteFieldScalar<T extends FiniteFieldScalar<T>>
   }
 
   @override
+  @mustCallSuper
   int get hashCode => characteristic.hashCode;
 
   @override
@@ -40,3 +29,27 @@ abstract class FiniteFieldScalar<T extends FiniteFieldScalar<T>>
       other is FiniteFieldScalar && characteristic == other.characteristic;
 }
 
+@immutable
+abstract class RingScalar<T extends RingScalar<T>> {
+  /// Do not use, temporarily here while a better design to get it emerges.
+  bool get isZero;
+
+  T get opposite;
+
+  /// Do not use, temporarily here while a better design to get it emerges.
+  T get zero;
+
+  T operator *(T other);
+
+  T operator +(T other);
+}
+
+@immutable
+abstract class RingWithOneScalar<T extends RingWithOneScalar<T>>
+    extends RingScalar<T> {
+  /// Do not use, temporarily here while a better design to get it emerges.
+  bool get isOne;
+
+  /// Do not use, temporarily here while a better design to get it emerges.
+  T get one;
+}

@@ -11,6 +11,18 @@ class PrimeFiniteFieldScalar extends FiniteFieldScalar<PrimeFiniteFieldScalar> {
   int get hashCode => value.hashCode ^ super.hashCode;
 
   @override
+  PrimeFiniteFieldScalar get inverse {
+    if (value == 0) {
+      throw new UnsupportedError('zero does not have inverse');
+    }
+
+    // TODO: Implement properly
+    return new Iterable.generate(characteristic, (i) => i + 1)
+        .map((v) => new PrimeFiniteFieldScalar(v, characteristic))
+        .firstWhere((e) => (this * e).isOne);
+  }
+
+  @override
   bool get isOne => value == 1;
 
   @override
@@ -19,6 +31,10 @@ class PrimeFiniteFieldScalar extends FiniteFieldScalar<PrimeFiniteFieldScalar> {
   @override
   PrimeFiniteFieldScalar get one =>
       new PrimeFiniteFieldScalar(1, characteristic);
+
+  @override
+  PrimeFiniteFieldScalar get opposite =>
+      new PrimeFiniteFieldScalar(-value, characteristic);
 
   @override
   PrimeFiniteFieldScalar get zero =>
