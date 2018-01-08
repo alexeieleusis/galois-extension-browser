@@ -35,13 +35,28 @@ void main() {
       expect(one.isOne, true);
     });
 
-    test('one', () {
+    test('zero', () {
       final scalarZero = new PrimeFiniteFieldScalar(0, 3);
 
       final zero = new Polynomial([scalarZero]);
 
       expect(zero, zero.zero);
       expect(zero.isZero, true);
+    });
+
+    test('long division', () {
+      final dividendScalars = [6, 5, 4, 3, 2];
+      final divisorScalars = [4, 1];
+      final dividend = new Polynomial(
+          dividendScalars.map((s) => new PrimeFiniteFieldScalar(s, 7)));
+      final divisor = new Polynomial(
+          divisorScalars.map((s) => new PrimeFiniteFieldScalar(s, 7)));
+
+      final division = dividend.longDivision(divisor);
+
+      expect(((divisor * division.item1) + division.item2), dividend);
+      expect(division.item1.scalars.map((s) => s.value), [0, 3, 2, 2]);
+      expect(division.item2.scalars.map((s) => s.value), [6]);
     });
   });
 }

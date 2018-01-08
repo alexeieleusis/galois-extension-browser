@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:library/src/definitions.dart';
 import 'package:shuttlecock/shuttlecock.dart';
+import 'package:tuple/tuple.dart';
 
 class Polynomial<T extends FieldScalar<T>>
     extends RingWithOneScalar<Polynomial<T>> {
@@ -18,16 +19,19 @@ class Polynomial<T extends FieldScalar<T>>
     }
   }
 
-  int get degree => scalars.length - 1;
+  int get degree => !isZero
+      ? scalars.length - 1
+      : throw new UnsupportedError(
+          'polynomial zero does not have an associated degree');
 
   @override
   int get hashCode => scalars.toList().fold(0, (h, s) => h ^ s.hashCode);
 
   @override
-  bool get isOne => scalars.single.isOne;
+  bool get isOne => scalars.length == 1 && scalars.single.isOne;
 
   @override
-  bool get isZero => scalars.single.isZero;
+  bool get isZero => scalars.length == 1 && scalars.single.isZero;
 
   @override
   Polynomial<T> get one => new Polynomial([scalars.first.one]);
@@ -55,10 +59,16 @@ class Polynomial<T extends FieldScalar<T>>
 
   @override
   Polynomial<T> operator +(Polynomial<T> other) {
+    if (isZero) {
+      return other;
+    } else if (other.isZero) {
+      return this;
+    }
+
     final thisScalars = scalars.toList();
     final otherScalars = other.scalars.toList();
     final newDegree = max(degree, other.degree);
-    final newScalars = new List<T>(newDegree + 1);
+    var newScalars = new List<T>(newDegree + 1);
     for (var i = 0; i <= newDegree; i++) {
       final scalar =
           (i < scalars.length ? thisScalars[i] : thisScalars.first.zero);
@@ -67,13 +77,21 @@ class Polynomial<T extends FieldScalar<T>>
       newScalars[i] = scalar + otherScalar;
     }
 
-    return new Polynomial(newScalars);
+    // Degree might have decreased.
+    newScalars = newScalars.reversed
+        .skipWhile((s) => s.isZero)
+        .toList()
+        .reversed
+        .toList();
+    return new Polynomial(
+        newScalars.isNotEmpty ? newScalars : [scalars.first.zero]);
   }
 
   @override
   bool operator ==(Object other) {
     if (!(identical(this, other) ||
-        other is Polynomial && degree == other.degree)) {
+        other is Polynomial &&
+            (isZero && other.isZero || degree == other.degree))) {
       return false;
     }
 
@@ -87,5 +105,37 @@ class Polynomial<T extends FieldScalar<T>>
     }
 
     return true;
+  }
+
+  Tuple2<Polynomial<T>, Polynomial<T>> longDivision(Polynomial<T> divisor) {
+    if (divisor.isZero) {
+      throw new ArgumentError.value(divisor, 'division by zero');
+    }
+
+    var quotient = divisor.zero;
+    var dividend = this;
+    while (!dividend.isZero && dividend.degree > divisor.degree) {
+      final currentDegree = dividend.degree - divisor.degree;
+      final currentFactorScalars =
+          new List.filled(currentDegree + 1, divisor.scalars.first.zero);
+      currentFactorScalars[currentDegree] =
+          dividend.scalars.last * divisor.scalars.last.inverse;
+      final currentFactor = new Polynomial(currentFactorScalars);
+      final currentProduct = divisor * currentFactor;
+      quotient += currentFactor;
+      dividend = dividend + currentProduct.opposite;
+    }
+
+    return new Tuple2(quotient, dividend);
+  }
+
+  @override
+  String toString() {
+    final buffer = new StringBuffer();
+    final list = scalars.toList();
+    for (var i = 0; i < scalars.length; i++) {
+      buffer.write('${list[i]} x^$i + ');
+    }
+    return buffer.toString().substring(0, buffer.length - 3);
   }
 }
