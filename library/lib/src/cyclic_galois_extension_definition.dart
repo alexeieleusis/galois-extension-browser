@@ -1,15 +1,14 @@
-import 'package:library/src/galois_extension_element.dart';
-import 'package:library/src/primes.dart';
+import 'package:library/library.dart';
 import 'package:meta/meta.dart';
 import 'package:shuttlecock/shuttlecock.dart';
 
 @immutable
-class GaloisExtensionDefinition {
+class CyclicGaloisExtensionDefinition {
   final int generator;
   final int characteristic;
   final int degree;
 
-  GaloisExtensionDefinition(this.generator, this.characteristic, this.degree) {
+  CyclicGaloisExtensionDefinition(this.generator, this.characteristic, this.degree) {
     if (!isPrime(characteristic)) {
       throw new ArgumentError.value(
           characteristic, 'characteristic', 'must be prime');
@@ -37,21 +36,13 @@ class GaloisExtensionDefinition {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GaloisExtensionDefinition &&
+      other is CyclicGaloisExtensionDefinition &&
           runtimeType == other.runtimeType &&
           generator == other.generator &&
           characteristic == other.characteristic &&
           degree == other.degree;
 
-  IterableMonad<GaloisExtensionElement> generateElements() {
-    final seed = new IterableMonad.fromIterable(
-        new Iterable.generate(characteristic, (i) => [i]));
-    return new Iterable.generate(degree - 1)
-        .fold<IterableMonad<List<int>>>(
-            seed,
-            (acc, _) => acc.flatMap((vector) => new IterableMonad.fromIterable(
-                new Iterable.generate(characteristic,
-                    (i) => vector.toList()..insertAll(0, [i])))))
-        .map((v) => new GaloisExtensionElement(this, v));
-  }
+  IterableMonad<CyclicGaloisExtensionElement> generateElements() =>
+      buildAllSequences(characteristic, degree - 1)
+          .map((v) => new CyclicGaloisExtensionElement(this, v));
 }

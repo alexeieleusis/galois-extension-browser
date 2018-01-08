@@ -2,6 +2,16 @@ import 'dart:math' as math;
 
 import 'package:shuttlecock/shuttlecock.dart';
 
+IterableMonad<Iterable<int>> buildAllSequences(int scalarCount, int length) {
+  final seed = new IterableMonad.fromIterable(
+      new Iterable.generate(scalarCount, (i) => [i]));
+  return new Iterable.generate(length).fold<IterableMonad<List<int>>>(
+      seed,
+      (acc, _) => acc.flatMap((vector) => new IterableMonad.fromIterable(
+          new Iterable.generate(
+              scalarCount, (i) => vector.toList()..insertAll(0, [i])))));
+}
+
 IterableMonad<int> findConstantsForSeed(int power, int prime) =>
     new IterableMonad.fromIterable(new Iterable.generate(prime))
         .where((c) => isCyclicExtensionSeed(c, power, prime));

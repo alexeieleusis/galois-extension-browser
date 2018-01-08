@@ -42,6 +42,9 @@ class Polynomial<T extends FieldScalar<T>>
   @override
   Polynomial<T> get zero => new Polynomial([scalars.first.zero]);
 
+  Polynomial<T> operator %(Polynomial<T> divisor) =>
+      longDivision(divisor).item2;
+
   @override
   Polynomial<T> operator *(Polynomial<T> other) {
     final thisScalars = scalars.toList();
@@ -138,4 +141,7 @@ class Polynomial<T extends FieldScalar<T>>
     }
     return buffer.toString().substring(0, buffer.length - 3);
   }
+
+  Polynomial<T> operator ~/(Polynomial<T> divisor) =>
+      longDivision(divisor).item1;
 }

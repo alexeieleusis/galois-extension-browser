@@ -22,7 +22,7 @@ class FieldBuilder implements OnInit {
   SelectionOptions<int> degreeSelectionOptions = new SelectionOptions(
       [new OptionGroup(new Iterable.generate(100, (i) => i + 2).toList())]);
 
-  GaloisExtensionDefinition definition;
+  CyclicGaloisExtensionDefinition definition;
 
   SelectionModel<int> generatorSelection = new SelectionModel.withList();
 
@@ -33,7 +33,7 @@ class FieldBuilder implements OnInit {
     RelativePosition.AdjacentBottomRight
   ];
 
-  GaloisExtension extension;
+  CyclicGaloisExtension extension;
 
   FieldBuilder() {
     degreeSelection.selectionChanges.listen((_) {
@@ -76,8 +76,8 @@ class FieldBuilder implements OnInit {
       }
 
       definition =
-          new GaloisExtensionDefinition(_generator, _characteristic, _degree);
-      extension = new GaloisExtension(definition);
+          new CyclicGaloisExtensionDefinition(_generator, _characteristic, _degree);
+      extension = new CyclicGaloisExtension(definition);
     });
   }
 

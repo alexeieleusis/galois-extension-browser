@@ -1,4 +1,4 @@
-import 'package:library/src/primes.dart';
+import 'package:library/library.dart';
 import 'package:test/test.dart';
 
 void main() {

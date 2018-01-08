@@ -1,14 +1,14 @@
 import 'dart:math' as math;
 
-import 'package:library/src/galois_extension_definition.dart';
+import 'package:library/library.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class GaloisExtensionElement {
-  final GaloisExtensionDefinition definition;
+class CyclicGaloisExtensionElement {
+  final CyclicGaloisExtensionDefinition definition;
   final Iterable<int> values;
 
-  GaloisExtensionElement(this.definition, this.values) {
+  CyclicGaloisExtensionElement(this.definition, this.values) {
     // ignore: avoid_function_literals_in_foreach_calls
     values.forEach((v) {
       if (v != v % definition.characteristic) {
@@ -29,7 +29,7 @@ class GaloisExtensionElement {
   @override
   int get hashCode => definition.hashCode ^ values.hashCode;
 
-  GaloisExtensionElement operator *(GaloisExtensionElement other) {
+  CyclicGaloisExtensionElement operator *(CyclicGaloisExtensionElement other) {
     if (other.definition != definition) {
       throw new ArgumentError.value(
           other, 'other', 'other must have the same definition');
@@ -53,10 +53,10 @@ class GaloisExtensionElement {
       newValues[i] = newValues[i] % definition.characteristic;
     }
 
-    return new GaloisExtensionElement(definition, newValues);
+    return new CyclicGaloisExtensionElement(definition, newValues);
   }
 
-  GaloisExtensionElement operator +(GaloisExtensionElement other) {
+  CyclicGaloisExtensionElement operator +(CyclicGaloisExtensionElement other) {
     if (other.definition != definition) {
       throw new ArgumentError.value(
           other, 'other', 'other must have the same definition');
@@ -70,17 +70,17 @@ class GaloisExtensionElement {
       newValues[i] = (myValues[i] + otherValues[i]) % definition.characteristic;
     }
 
-    return new GaloisExtensionElement(definition, newValues);
+    return new CyclicGaloisExtensionElement(definition, newValues);
   }
 
   @override
   bool operator ==(Object other) {
     if (!(identical(this, other) ||
-        other is GaloisExtensionElement && definition == other.definition)) {
+        other is CyclicGaloisExtensionElement && definition == other.definition)) {
       return false;
     }
 
-    final GaloisExtensionElement element = other;
+    final CyclicGaloisExtensionElement element = other;
     final myValues = values.toList();
     final otherValues = element.values.toList();
     for (var index = 0; index < myValues.length; index++) {

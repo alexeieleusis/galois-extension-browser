@@ -10,15 +10,15 @@ void _computeForDegree(int degree) {
   void computeForCharacteristic(int characteristic) {
     void computeForSeed(int generator) {
       final definition =
-          new GaloisExtensionDefinition(generator, characteristic, degree);
-      final field = new GaloisExtension(definition);
+          new CyclicGaloisExtensionDefinition(generator, characteristic, degree);
+      final field = new CyclicGaloisExtension(definition);
       final itemCount = pow(characteristic, degree).toInt() - 1;
       print('degree: $degree, charactheristic: $characteristic, '
           'constant: $generator, generator: ${field.generator}');
-      GaloisExtensionElement current;
+      CyclicGaloisExtensionElement current;
       for (var power = 0; power < itemCount; power++) {
         current = current == null ? field.one : current * field.generator;
-        GaloisExtensionElement oppositeCandidate;
+        CyclicGaloisExtensionElement oppositeCandidate;
         var oppositePower = -1;
         while (oppositeCandidate == null ||
             (current + oppositeCandidate).values.any((d) => d != 0)) {
