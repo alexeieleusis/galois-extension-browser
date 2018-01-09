@@ -117,7 +117,7 @@ class Polynomial<T extends FieldScalar<T>>
 
     var quotient = divisor.zero;
     var dividend = this;
-    while (!dividend.isZero && dividend.degree > divisor.degree) {
+    while (!dividend.isZero && dividend.degree >= divisor.degree) {
       final currentDegree = dividend.degree - divisor.degree;
       final currentFactorScalars =
           new List.filled(currentDegree + 1, divisor.scalars.first.zero);

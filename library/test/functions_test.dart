@@ -45,5 +45,17 @@ void main() {
       expect(findConstantsForSeed(6, 7), [3, 5]);
       expect(findConstantsForSeed(10, 11), [2, 6, 7, 8]);
     });
+
+    test('irreducible polynomial characteristic 2', () {
+      final p = findIrreduciblePolynomial(2, 2);
+
+      expect(p.scalars.map((s) => s.value), [1, 1, 1]);
+    });
+
+    test('irreducible polynomial characteristic 3', () {
+      final p = findIrreduciblePolynomial(2, 3);
+
+      expect(p.scalars.map((s) => s.value), [1, 0, 1]);
+    });
   });
 }

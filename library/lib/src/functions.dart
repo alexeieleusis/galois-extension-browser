@@ -1,11 +1,12 @@
 import 'dart:math' as math;
 
+import 'package:library/library.dart';
 import 'package:shuttlecock/shuttlecock.dart';
 
 IterableMonad<Iterable<int>> buildAllSequences(int scalarCount, int length) {
   final seed = new IterableMonad.fromIterable(
       new Iterable.generate(scalarCount, (i) => [i]));
-  return new Iterable.generate(length).fold<IterableMonad<List<int>>>(
+  return new Iterable.generate(length - 1).fold<IterableMonad<List<int>>>(
       seed,
       (acc, _) => acc.flatMap((vector) => new IterableMonad.fromIterable(
           new Iterable.generate(
@@ -18,6 +19,29 @@ IterableMonad<int> findConstantsForSeed(int power, int prime) =>
 
 IterableMonad<int> findDivisors(int n) => new IterableMonad.fromIterable(
     new Iterable.generate(n - 1, (i) => i + 2).where((d) => n % d == 0));
+
+Polynomial<PrimeFiniteFieldScalar> findIrreduciblePolynomial(
+    int degree, int characteristic) {
+  // TODO: This block is repeated with FiniteResidueFieldScalar.inverse.
+  final polynomials = buildAllSequences(characteristic, degree + 1)
+      .skip(1)
+      .map((scalars) => scalars
+          .toList()
+          .reversed
+          .skipWhile((s) => s == 0)
+          .toList()
+          .reversed
+          .toList())
+      .where((s) => 2 <= s.length)
+      .map((s) => s.map((v) => new PrimeFiniteFieldScalar(v, characteristic)))
+      .map((s) => new Polynomial(s))
+      .toList();
+  // TODO: Filter to the actual irreducibles.
+  final irreducibles = polynomials.where((p) => p.degree < degree).toList();
+  final candidates = polynomials.where((p) => p.degree == degree).toList();
+  return candidates
+      .firstWhere((s) => _isIrreducible(s, irreducibles, characteristic));
+}
 
 IterableMonad<int> findPrimesCongruentWithOne(int module, int count) {
   final collection = <int>[];
@@ -72,6 +96,24 @@ IterableMonad<int> _addPrimesWhile(bool lengthPredicate(Iterable<int> acc)) {
     next++;
   }
   return new IterableMonad.fromIterable(collection);
+}
+
+bool _isIrreducible(Polynomial<PrimeFiniteFieldScalar> candidate,
+    List<Polynomial<PrimeFiniteFieldScalar>> collection, int characteristic) {
+  for (var degree = 1; degree < candidate.degree; degree++) {
+    final leftFactors = collection.where((p) => p.degree == degree).toList();
+    final rightFactors =
+        collection.where((p) => p.degree == candidate.degree - degree).toList();
+    final reduced = leftFactors.fold(
+        false,
+        (acc, l) =>
+            rightFactors.fold(acc, (acc2, r) => acc2 || candidate == l * r));
+    if (reduced) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 bool _isPrime(int candidate, List<int> collection) {

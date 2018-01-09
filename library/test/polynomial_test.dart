@@ -57,6 +57,18 @@ void main() {
       expect(((divisor * division.item1) + division.item2), dividend);
       expect(division.item1.scalars.map((s) => s.value), [0, 3, 2, 2]);
       expect(division.item2.scalars.map((s) => s.value), [6]);
+      expect((dividend % divisor).scalars.map((s) => s.value), [6]);
+    });
+
+    test('%', () {
+      final dividendScalars =
+          [2, 0, 1].map((s) => new PrimeFiniteFieldScalar(s, 3));
+      final divisorScalars =
+          [1, 0, 1].map((s) => new PrimeFiniteFieldScalar(s, 3));
+      final dividend = new Polynomial(dividendScalars);
+      final divisor = new Polynomial(divisorScalars);
+
+      expect(dividend % divisor, dividend.one);
     });
   });
 }

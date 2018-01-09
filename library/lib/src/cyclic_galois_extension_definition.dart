@@ -43,6 +43,6 @@ class CyclicGaloisExtensionDefinition {
           degree == other.degree;
 
   IterableMonad<CyclicGaloisExtensionElement> generateElements() =>
-      buildAllSequences(characteristic, degree - 1)
+      buildAllSequences(characteristic, degree)
           .map((v) => new CyclicGaloisExtensionElement(this, v));
 }
