@@ -21,6 +21,10 @@ class FiniteResidueFieldScalar
 
   @override
   FiniteResidueFieldScalar get inverse {
+    if(isZero) {
+      throw new UnsupportedError('zero does not have inverse');
+    }
+
     // TODO: Implement Euclid's algorithm and stop relying in brute force.
     final polynomials = buildAllSequences(characteristic, irreducible.degree)
         .skip(1)

@@ -23,6 +23,7 @@ IterableMonad<int> findDivisors(int n) => new IterableMonad.fromIterable(
 Polynomial<PrimeFiniteFieldScalar> findIrreduciblePolynomial(
     int degree, int characteristic) {
   // TODO: This block is repeated with FiniteResidueFieldScalar.inverse.
+  // Also FiniteResidueFieldDefinition.generateElements.
   final polynomials = buildAllSequences(characteristic, degree + 1)
       .skip(1)
       .map((scalars) => scalars

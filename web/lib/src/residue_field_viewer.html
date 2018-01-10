@@ -1,0 +1,39 @@
+<div>
+    Extension degree:
+    <material-dropdown-select
+            [buttonText]="detectiveSelectorText"
+            [selection]="degreeSelection"
+            [options]="degreeSelectionOptions">
+    </material-dropdown-select>
+</div>
+
+<div>
+    Field charateristic:
+    <material-dropdown-select
+            [buttonText]="characteristicSelectorText"
+            [selection]="characteristicSelection"
+            [options]="characteristicSelectionOptions">
+    </material-dropdown-select>
+
+</div>
+
+<br>
+<div *ngIf="extension != null">
+    <div>Generator: {{format(extension.generator)}}</div>
+    <div>{{extension.generator}}</div>
+
+    <table>
+        <tr>
+            <th>*</th>
+            <th *ngFor="let element of extension.elements; let i = index">
+                {{format(element)}}
+            </th>
+        </tr>
+        <tr *ngFor="let first of extension.elements; let i = index">
+            <td>{{format(first)}}</td>
+            <td *ngFor="let second of extension.elements; let j = index">
+                {{format(first * second)}}
+            </td>
+        </tr>
+    </table>
+</div>

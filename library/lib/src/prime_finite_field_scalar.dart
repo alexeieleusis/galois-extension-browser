@@ -1,4 +1,4 @@
-import 'package:library/src/definitions.dart';
+import 'package:library/library.dart';
 
 class PrimeFiniteFieldScalar extends FiniteFieldScalar<PrimeFiniteFieldScalar> {
   final int value;
