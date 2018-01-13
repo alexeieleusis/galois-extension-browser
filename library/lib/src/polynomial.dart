@@ -27,6 +27,8 @@ class Polynomial<T extends FieldScalar<T>>
   @override
   int get hashCode => scalars.toList().fold(0, (h, s) => h ^ s.hashCode);
 
+  bool get isMonic => scalars.last.isOne;
+
   @override
   bool get isOne => scalars.length == 1 && scalars.single.isOne;
 

@@ -1,6 +1,6 @@
 import 'package:library/library.dart';
 
-main(List<String> arguments) {
+void main(List<String> arguments) {
   print('char\tdeg\tgen\t\tirred');
   primesLowerThan(20).forEach((prime) {
     new Iterable.generate(10, (d) => d + 2).forEach((degree) {
